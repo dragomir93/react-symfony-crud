@@ -1,0 +1,99 @@
+version: '3.8'
+
+services:
+  # https://hub.docker.com/_/php/
+  crud-php:
+    environment:
+      - PHP_IDE_CONFIG=serverName=localhost
+    container_name: crud-php
+    build:
+      context: ./api
+      dockerfile: docker/php/Dockerfile
+      cache_from:
+        - ./api/docker/php
+    env_file:
+      - ./api/.env
+    volumes:
+      - ./api:/srv/api:rw,cached
+      - /usr/local/lib
+    networks:
+      - crud-network
+
+        # https://hub.docker.com/_/nginx/
+  crud-nginx:
+    container_name: crud-nginx
+    build:
+      context: ./api
+      dockerfile: docker/nginx/Dockerfile
+      cache_from:
+        - ./api/docker/nginx
+    depends_on:
+      - crud-php
+      - crud-db
+    environment:
+      - URL=http://localhost:3004/
+    volumes:
+      - ./api/public:/srv/api/public:ro 
+    ports:
+      - "127.0.0.1:3000:80"
+    expose:
+      - "8000"
+    networks:
+      - crud-network
+
+  # https://hub.docker.com/_/mysql/
+  crud-db:
+    image: mysql:8.0
+    container_name: crud-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=crud
+      - MYSQL_DATABASE=api
+      - MYSQL_USER=crud_user
+      - MYSQL_PASSWORD=crud_password
+    volumes:
+     - ./mysql:/var/lib/mysql
+    ports:
+      - '8083:3306'
+    networks:
+      - crud-network
+
+  # https://hub.docker.com/r/mailhog/mailhog
+  crud-mailhog:
+    image: mailhog/mailhog
+    container_name: crud-mailhog
+    command: ["-smtp-bind-addr", "0.0.0.0:25"]
+    user: root
+    expose:
+      - 25
+      - 8025
+    ports:
+      - "127.0.0.1:8025:8025"
+    healthcheck:
+      test: echo | telnet 127.0.0.1 25
+    networks:
+      - crud-network
+  # client:
+  #   container_name: client
+  #   build:
+  #     context: ./client
+  #     dockerfile: docker/Dockerfile
+  #   restart: on-failure
+  #   depends_on:
+  #     - crud-php
+  #     - crud-nginx
+  #     - crud-db
+  #   networks:
+  #     - crud-network
+  #   volumes:
+  #     - ./client:/client
+  #     - /client/node_modules
+  #   ports:
+  #     - '127.0.0.1:8080:8080'
+
+networks:
+  crud-network:
+    external: true
+    driver: "bridge"
+# # volumes
+# volumes:
+#   nodemodules: {}
