@@ -29,8 +29,7 @@ class ProductsController extends AbstractController
     {
        $productsAll = $this->products->execute();
     
-       return new JsonResponse (
-        [
+       return new JsonResponse ([
         'products' => $productsAll,
         ]);
     }
