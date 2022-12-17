@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Service\Products\GetProductsService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class ProductsController extends AbstractController
+class GetAllProductsController extends AbstractController
 {
     private $products;
 
@@ -27,10 +27,15 @@ class ProductsController extends AbstractController
      */
     public function index(): JsonResponse
     {
-       $productsAll = $this->products->execute();
-    
-       return new JsonResponse ([
-        'products' => $productsAll,
-        ]);
+        try{
+            $productsAll = $this->products->execute();
+        
+            return new JsonResponse ($productsAll);
+
+        } catch (\Exception $exception) {
+            $this->logger->error($exception->getMessage());
+
+            return new JsonResponse([], JsonResponse::HTTP_BAD_REQUEST);
+        }
     }
 }
