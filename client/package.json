@@ -1,10 +1,14 @@
 {
   "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/material": "^5.11.0",
     "babel-preset-react": "^6.24.1",
     "file-loader": "^6.2.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.5.0",
     "webpack-dev-middleware": "^6.0.1",
     "webpack-hot-middleware": "^2.25.3"
   },

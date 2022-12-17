@@ -1,3 +1,12 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+index:
+    path:  /
+    controller: App\Controller\HomeController
+    requirements:
+        methods: GET
+react_route:
+    path:  /{name}
+    controller: App\Controller\HomeController
+    requirements:
+        name: '[\/\w\.-]*'
+        methods: GET
+
