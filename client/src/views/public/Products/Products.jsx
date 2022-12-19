@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { Avatar, Box, ButtonGroup, Container,
   Paper, Table, TableBody,
@@ -6,6 +6,8 @@ import { Avatar, Box, ButtonGroup, Container,
   TableHead, TableRow, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
+import { getProducts } from './Api';
+import { useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,6 +29,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Products = () => {
+
+  const [products,setProducts] = useState([]);
+
+  useEffect(() => {
+    showProducts()
+  }, [products]);
+
+  const showProducts = () => {
+    getProducts().then((response) => {
+      setProducts(response);
+      console.log(response);
+    });
+  }
   const classes = useStyles();
 
     return (
