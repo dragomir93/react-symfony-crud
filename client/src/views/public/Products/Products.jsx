@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import { getProducts } from './Api';
 import { useState } from 'react';
-
+import { publicRouteCodes } from '../../../constants/RouteCodes';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -34,14 +34,22 @@ const Products = () => {
 
   useEffect(() => {
     showProducts()
-  }, [products]);
+  }, []);
 
   const showProducts = () => {
     getProducts().then((response) => {
       setProducts(response);
-      console.log(response);
     });
   }
+
+  const updateProduct = (productId) => {
+      console.log("update product "+productId);
+  }
+
+  const deleteProduct = (productId) => {
+      console.log('delete product '+productId);    
+  }
+
   const classes = useStyles();
 
     return (
@@ -55,7 +63,7 @@ const Products = () => {
               </Typography>
             </Box>
             <Box>
-              <Link to="/create">
+              <Link to={publicRouteCodes.PRODUCTS_CREATE}>
                 <Button variant="contained" color="primary">
                   CREATE
                 </Button>
@@ -75,23 +83,25 @@ const Products = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-                <TableRow>
-                  <TableCell align="right">1</TableCell>
+              {products.map((product) => (
+                <TableRow key={product.productId}>
+                  <TableCell align="right">{product.productId}</TableCell>
                   <TableCell align="center">
                     <Box display="flex" justifyContent="center">
-                      <Avatar />
+                      <Avatar src={product.image}/>
                     </Box>
                   </TableCell>
-                  <TableCell align="left">Proizvod 1</TableCell>
-                  <TableCell align="left">Ovo je neki opis</TableCell>
-                  <TableCell align="left">300 $</TableCell>
+                  <TableCell align="left">{product.name}</TableCell>
+                  <TableCell align="left">{product.description}</TableCell>
+                  <TableCell align="left">{product.price} $</TableCell>
                   <TableCell align="center">
                     <ButtonGroup color="primary" aria-label="outlined primary button group">
-                      <Button>Edit</Button>
-                      <Button>Delete</Button>
+                      <Button onClick={() => updateProduct(product.productId)}>Edit</Button>
+                      <Button onClick={() => deleteProduct(product.productId)}>Delete</Button>
                     </ButtonGroup>
                   </TableCell>
                 </TableRow>
+              ))}
             </TableBody>
           </Table>
         </TableContainer>

@@ -4,7 +4,7 @@ import { publicRouteCodes } from '../constants/RouteCodes';
 import PublicTemplates from '../templates/PublicTemplates';
 
 const Products = lazy(() => import('../views/public/Products/Products'));
-
+const ProductsForm = lazy(() => import('../views/public/Products/ProductsForm/ProductsForm'));
 const PublicRoutes = () => (
   <PublicTemplates>
   <Routes>
@@ -12,6 +12,7 @@ const PublicRoutes = () => (
         path={publicRouteCodes.HOME}
         element={<Navigate to={publicRouteCodes.PRODUCTS} replace />} />
     <Route path={publicRouteCodes.PRODUCTS} element={<Products/>} />
+    <Route path={publicRouteCodes.PRODUCTS_CREATE} element={<ProductsForm/>} />
   </Routes>
   </PublicTemplates>
 );
