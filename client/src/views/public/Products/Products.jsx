@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
 import Button from '@mui/material/Button';
-import { Avatar, Box, ButtonGroup, Container,
+import { Alert, Avatar, Box, ButtonGroup, Container,
   Paper, Table, TableBody,
   TableCell, TableContainer,
   TableHead, TableRow, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
-import { getProducts } from './Api';
+import { getProducts, removeProduct } from './Api';
 import { useState } from 'react';
 import { publicRouteCodes } from '../../../constants/RouteCodes';
+import { Stack } from '@mui/system';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -31,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 const Products = () => {
 
   const [products,setProducts] = useState([]);
+  const [removeProductChecked,setRemoveProductChecked] = useState(false);
 
   useEffect(() => {
     showProducts()
@@ -39,6 +41,7 @@ const Products = () => {
   const showProducts = () => {
     getProducts().then((response) => {
       setProducts(response);
+      setRemoveProductChecked(false);
     });
   }
 
@@ -47,7 +50,11 @@ const Products = () => {
   }
 
   const deleteProduct = (productId) => {
-      console.log('delete product '+productId);    
+      removeProduct(productId).then(() => {
+        showProducts();
+        setRemoveProductChecked(true);
+      }).catch(() => {
+      });
   }
 
   const classes = useStyles();
@@ -107,6 +114,11 @@ const Products = () => {
         </TableContainer>
         </Paper>
       </Container>
+      {removeProductChecked &&
+      <Stack sx={{ width: '13%',marginBottom:'10px',marginLeft:'10px',position:'fixed',bottom:0}}>
+        <Alert severity="success">Product has been deleted!</Alert>
+       </Stack>
+      }
     </div>
     );
 }
