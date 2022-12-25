@@ -1,9 +1,10 @@
-import { Alert, Button, Container, Grid, Snackbar, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import { Button, Container, Grid, TextField, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { publicRouteCodes } from "../../../../constants/RouteCodes";
 import ApiClient from "../../../../api/ApiClient";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { getProductData, saveProduct } from "../Api";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -25,36 +26,57 @@ const useStyles = makeStyles((theme) => ({
 const ProductsForm = () => {
 
   let navigate = useNavigate();
+  const { id } = useParams();
+  const isEdit = !!id;
   const [formItems, setFormItems] = useState({
     name: "",
     price: null,
     description: "",
-    image: null,
+    image: "",
   });
+
+  useEffect(() => {
+    async function fetchProductsData() {
+      try {
+        const productData = await getProductData(id);
+        const formData = {
+          ...formItems,
+          ...productData,
+        };
+
+        await setFormItems(formData);
+      } catch (err) {
+        redirectToProductsList();
+      }
+    }
+    fetchProductsData();
+  }, [id]);
 
   const handleFormItemsChange = (value, field) => {
     setFormItems((prevState) => ({ ...prevState, [field]: value }));
   };
 
-  const redirectToEmployeeList = () => {
-    navigate(publicRouteCodes.PRODUCTS, {state: {isCreated:true} });
+  const redirectToProductsList = () => {
+    navigate(publicRouteCodes.PRODUCTS, {state: {isCreated:true, isEdit:isEdit} });
   };
 
   const handleSubmit = () => {
     const formData = { ...formItems };
-    ApiClient.post("/api/product", JSON.stringify(formData)).then(() => {
-        redirectToEmployeeList();
-      })
-      .catch(({ response }) => {
-      });
-  };
 
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (isEdit) {
+      saveProduct(id,formData).then(() => {
+        redirectToProductsList();
+      }).catch(({ response }) => {
+
+      });
       return;
     }
 
-    setOpen(false);
+    ApiClient.post("/api/product", JSON.stringify(formData)).then(() => {
+        redirectToProductsList();
+      })
+      .catch(({ response }) => {
+      });
   };
 
   const classes = useStyles();
@@ -76,6 +98,7 @@ const ProductsForm = () => {
                 fullWidth
                 id="name"
                 label="Name"
+                value={formItems.name}
                 onChange={(event) =>
                   handleFormItemsChange(event.target.value, "name")
                 }
@@ -86,6 +109,7 @@ const ProductsForm = () => {
                 variant="outlined"
                 required
                 fullWidth
+                value={formItems.price == null ? '' : formItems.price}
                 id="price"
                 label="Price"
                 onChange={(event) =>
@@ -101,6 +125,7 @@ const ProductsForm = () => {
                 fullWidth
                 id="description"
                 label="Description"
+                value={formItems.description}
                 onChange={(event) =>
                   handleFormItemsChange(event.target.value, "description")
                 }
@@ -113,6 +138,7 @@ const ProductsForm = () => {
                 fullWidth
                 id="image"
                 label="Image"
+                value={formItems.image}
                 onChange={(event) =>
                   handleFormItemsChange(event.target.value, "image")
                 }
@@ -126,7 +152,9 @@ const ProductsForm = () => {
             color="primary"
             sx={{ marginTop: 2 }}
           >
-            Create
+               {!isEdit
+                ? <Typography>CREATE</Typography>
+                : <Typography>SAVE</Typography>}
           </Button>
         </form>
       </div>

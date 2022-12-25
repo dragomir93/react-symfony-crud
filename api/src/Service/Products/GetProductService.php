@@ -30,6 +30,7 @@ class GetProductService {
                 'name'          => $product->getName(),
                 'price'         => $product->getPrice(),
                 'description'   => $product->getDescription(),
+                'image'         => $product->getImage(),
             ];
         }
         return $response;

@@ -25,9 +25,21 @@ const removeProduct = (id) => new Promise((resolve, reject) => {
 });
 
 const saveProduct = (
+  id,
   formData,
 ) => new Promise((resolve, reject) => {
-  ApiClient.post(`/api/product`,
+  ApiClient.post(`/api/product/${id}`,
+    formData).then(({ data }) => {
+    resolve(data);
+  }).catch((err) => {
+    reject(err);
+  });
+});
+
+const saveProducts = (
+  formData,
+) => new Promise((resolve, reject) => {
+  ApiClient.post(`/api/product/`,
     formData).then(({ data }) => {
     resolve(data);
   }).catch((err) => {

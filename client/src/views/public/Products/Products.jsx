@@ -4,7 +4,7 @@ import { Alert, Avatar, Box, ButtonGroup, Container,
   Paper, Table, TableBody,
   TableCell, TableContainer,
   TableHead, TableRow, Typography } from '@mui/material';
-import { Link, useLocation } from 'react-router-dom';
+import { generatePath, Link, useLocation, useNavigate } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import { getProducts, removeProduct } from './Api';
 import { useState } from 'react';
@@ -34,16 +34,23 @@ const Products = () => {
   const [products,setProducts] = useState([]);
   const [removeProductChecked,setRemoveProductChecked] = useState(false);
   const [isCreatedProduct,setIsCreatedProduct] = useState(false);
-
+  const [isUpdatedProduct,setIsUpdatedProduct] = useState(false);
+  let navigate = useNavigate();
+  console.log()
   useEffect(() => {
     if (location.state !== null) {
+      if (location.state.isEdit) {
+      setIsUpdatedProduct(location.state.isCreated);
+      } else {
       setIsCreatedProduct(location.state.isCreated);
+      }
     }
     showProducts()
   }, []);
 
   setTimeout(() => {
     setIsCreatedProduct(false);
+    setIsUpdatedProduct(false);
   }, 2000);
 
   const showProducts = () => {
@@ -54,7 +61,9 @@ const Products = () => {
   }
 
   const updateProduct = (productId) => {
-      console.log("update product "+productId);
+    navigate(generatePath(generatePath(
+      publicRouteCodes.PRODUCTS_EDIT, { id: productId },
+    )));
   }
 
   const deleteProduct = (productId) => {
@@ -130,6 +139,11 @@ const Products = () => {
       {isCreatedProduct &&
       <Stack sx={{ width: '13%',marginBottom:'10px',marginLeft:'10px',position:'fixed',bottom:0}}>
         <Alert severity="success">Product has been created!</Alert>
+       </Stack>
+      }
+       {isUpdatedProduct &&
+      <Stack sx={{ width: '13%',marginBottom:'10px',marginLeft:'10px',position:'fixed',bottom:0}}>
+        <Alert severity="success">Product has been updated!</Alert>
        </Stack>
       }
     </div>
