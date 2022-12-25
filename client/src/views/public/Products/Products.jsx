@@ -4,7 +4,7 @@ import { Alert, Avatar, Box, ButtonGroup, Container,
   Paper, Table, TableBody,
   TableCell, TableContainer,
   TableHead, TableRow, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import { getProducts, removeProduct } from './Api';
 import { useState } from 'react';
@@ -30,13 +30,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Products = () => {
-
+  const location = useLocation();
   const [products,setProducts] = useState([]);
   const [removeProductChecked,setRemoveProductChecked] = useState(false);
+  const [isCreatedProduct,setIsCreatedProduct] = useState(false);
 
   useEffect(() => {
+    if (location.state !== null) {
+      setIsCreatedProduct(location.state.isCreated);
+    }
     showProducts()
   }, []);
+
+  setTimeout(() => {
+    setIsCreatedProduct(false);
+  }, 2000);
 
   const showProducts = () => {
     getProducts().then((response) => {
@@ -117,6 +125,11 @@ const Products = () => {
       {removeProductChecked &&
       <Stack sx={{ width: '13%',marginBottom:'10px',marginLeft:'10px',position:'fixed',bottom:0}}>
         <Alert severity="success">Product has been deleted!</Alert>
+       </Stack>
+      }
+      {isCreatedProduct &&
+      <Stack sx={{ width: '13%',marginBottom:'10px',marginLeft:'10px',position:'fixed',bottom:0}}>
+        <Alert severity="success">Product has been created!</Alert>
        </Stack>
       }
     </div>

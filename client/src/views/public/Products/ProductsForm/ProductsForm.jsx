@@ -37,7 +37,7 @@ const ProductsForm = () => {
   };
 
   const redirectToEmployeeList = () => {
-    navigate(publicRouteCodes.HOME);
+    navigate(publicRouteCodes.PRODUCTS, {state: {isCreated:true} });
   };
 
   const handleSubmit = () => {
@@ -46,7 +46,6 @@ const ProductsForm = () => {
         redirectToEmployeeList();
       })
       .catch(({ response }) => {
-        console.log(response);
       });
   };
 
