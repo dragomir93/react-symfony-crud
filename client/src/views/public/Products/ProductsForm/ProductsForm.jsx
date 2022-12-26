@@ -34,7 +34,10 @@ const ProductsForm = () => {
     description: "",
     image: "",
   });
-
+  const [isFormInvalidName, setIsFormInvalidName] = useState(false);
+  const [isFormInvalidPrice, setIsFormInvalidPrice] = useState(false);
+  const [isFormInvalidDesc, setIsFormInvalidDesc] = useState(false);
+  const [isFormInvalidImage, setIsFormInvalidImage] = useState(false);
   useEffect(() => {
     async function fetchProductsData() {
       try {
@@ -62,6 +65,30 @@ const ProductsForm = () => {
 
   const handleSubmit = () => {
     const formData = { ...formItems };
+
+    if (formItems.name !== "" ){
+      setIsFormInvalidName(false);
+    } else {
+      setIsFormInvalidName(true);
+    }
+
+    if (formItems.description !== "" ){
+      setIsFormInvalidDesc(false);
+    } else {
+      setIsFormInvalidDesc(true);
+    }
+
+    if (formItems.price !== null){
+      setIsFormInvalidPrice(false);
+    } else {
+      setIsFormInvalidPrice(true);
+    }
+
+    if (formItems.image !== "" ){
+      setIsFormInvalidImage(false);
+    } else {
+      setIsFormInvalidImage(true);
+    }
 
     if (isEdit) {
       saveProduct(id,formData).then(() => {
@@ -99,6 +126,8 @@ const ProductsForm = () => {
                 id="name"
                 label="Name"
                 value={formItems.name}
+                error={isFormInvalidName}
+                helperText={isFormInvalidName && 'Field must not be empty!'}
                 onChange={(event) =>
                   handleFormItemsChange(event.target.value, "name")
                 }
@@ -112,6 +141,8 @@ const ProductsForm = () => {
                 value={formItems.price == null ? '' : formItems.price}
                 id="price"
                 label="Price"
+                error={isFormInvalidPrice}
+                helperText={isFormInvalidPrice && 'Field must not be empty!'}
                 onChange={(event) =>
                   handleFormItemsChange(event.target.value, "price")
                 }
@@ -126,6 +157,8 @@ const ProductsForm = () => {
                 id="description"
                 label="Description"
                 value={formItems.description}
+                error={isFormInvalidDesc}
+                helperText={isFormInvalidDesc && 'Field must not be empty!'}
                 onChange={(event) =>
                   handleFormItemsChange(event.target.value, "description")
                 }
@@ -139,6 +172,8 @@ const ProductsForm = () => {
                 id="image"
                 label="Image"
                 value={formItems.image}
+                error={isFormInvalidImage}
+                helperText={isFormInvalidImage && 'Field must not be empty!'}
                 onChange={(event) =>
                   handleFormItemsChange(event.target.value, "image")
                 }

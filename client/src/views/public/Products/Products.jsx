@@ -1,6 +1,11 @@
 import React, { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { Alert, Avatar, Box, ButtonGroup, Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Paper, Table, TableBody,
   TableCell, TableContainer,
   TableHead, TableRow, Typography } from '@mui/material';
@@ -35,8 +40,10 @@ const Products = () => {
   const [removeProductChecked,setRemoveProductChecked] = useState(false);
   const [isCreatedProduct,setIsCreatedProduct] = useState(false);
   const [isUpdatedProduct,setIsUpdatedProduct] = useState(false);
+  const [productDelete,setProductDelete] = useState([]);
+  const [open, setOpen] = useState(false);
   let navigate = useNavigate();
-  console.log()
+
   useEffect(() => {
     if (location.state !== null) {
       if (location.state.isEdit) {
@@ -66,8 +73,18 @@ const Products = () => {
     )));
   }
 
+  const handleDeleteProductPopup = (productId)  => {
+      setOpen(true);
+      setProductDelete(productId);
+  }
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const deleteProduct = (productId) => {
       removeProduct(productId).then(() => {
+        handleClose();
         showProducts();
         setRemoveProductChecked(true);
       }).catch(() => {
@@ -121,7 +138,7 @@ const Products = () => {
                   <TableCell align="center">
                     <ButtonGroup color="primary" aria-label="outlined primary button group">
                       <Button onClick={() => updateProduct(product.productId)}>Edit</Button>
-                      <Button onClick={() => deleteProduct(product.productId)}>Delete</Button>
+                      <Button onClick={() => handleDeleteProductPopup(product.productId)}>Delete</Button>
                     </ButtonGroup>
                   </TableCell>
                 </TableRow>
@@ -146,6 +163,28 @@ const Products = () => {
         <Alert severity="success">Product has been updated!</Alert>
        </Stack>
       }
+      {open &&  
+      <Dialog
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">
+        {"Alert"}
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+         Do you want to delete product?
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose}>No</Button>
+        <Button onClick={() => deleteProduct(productDelete)} autoFocus>
+          Yes
+        </Button>
+      </DialogActions>
+    </Dialog>}
     </div>
     );
 }
