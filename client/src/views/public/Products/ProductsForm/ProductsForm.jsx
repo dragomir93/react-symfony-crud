@@ -66,28 +66,17 @@ const ProductsForm = () => {
   const handleSubmit = () => {
     const formData = { ...formItems };
 
-    if (formItems.name !== "" ){
-      setIsFormInvalidName(false);
-    } else {
+    if (formItems.name.trim() === "" || formItems.description.trim() === "" || formItems.price === null || formItems.image.trim() === ""){
       setIsFormInvalidName(true);
-    }
-
-    if (formItems.description !== "" ){
-      setIsFormInvalidDesc(false);
-    } else {
       setIsFormInvalidDesc(true);
-    }
-
-    if (formItems.price !== null){
-      setIsFormInvalidPrice(false);
-    } else {
       setIsFormInvalidPrice(true);
-    }
-
-    if (formItems.image !== "" ){
-      setIsFormInvalidImage(false);
-    } else {
       setIsFormInvalidImage(true);
+      return;
+    } else {
+      setIsFormInvalidName(false);
+      setIsFormInvalidDesc(false);
+      setIsFormInvalidPrice(false);
+      setIsFormInvalidImage(false);
     }
 
     if (isEdit) {
