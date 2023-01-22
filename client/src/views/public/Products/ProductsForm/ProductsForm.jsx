@@ -42,6 +42,7 @@ const ProductsForm = () => {
   useEffect(() => {
     async function fetchProductsData() {
       try {
+        if (isEdit) {
         const productData = await getProductData(id);
         const formData = {
           ...formItems,
@@ -49,6 +50,7 @@ const ProductsForm = () => {
         };
 
         await setFormItems(formData);
+      }
       } catch (err) {
         redirectToProductsList();
       }
@@ -110,7 +112,7 @@ const ProductsForm = () => {
       .catch(({ response }) => {
       });
   };
-console.log(isFormInvalidImage);
+
   const classes = useStyles();
   return (
   <Container maxWidth="xs">
