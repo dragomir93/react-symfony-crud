@@ -34,6 +34,7 @@ const ProductsForm = () => {
     description: "",
     image: "",
   });
+
   const [isFormInvalidName, setIsFormInvalidName] = useState(false);
   const [isFormInvalidPrice, setIsFormInvalidPrice] = useState(false);
   const [isFormInvalidDesc, setIsFormInvalidDesc] = useState(false);
@@ -63,22 +64,37 @@ const ProductsForm = () => {
     navigate(publicRouteCodes.PRODUCTS, {state: {isCreated:true, isEdit:isEdit} });
   };
 
-  const handleSubmit = () => {
-    const formData = { ...formItems };
-
-    if (formItems.name.trim() === "" || formItems.description.trim() === "" || formItems.price === null || formItems.image.trim() === ""){
+  const validateForm = () => {
+    if (formItems.name.trim() === ""){
       setIsFormInvalidName(true);
-      setIsFormInvalidDesc(true);
-      setIsFormInvalidPrice(true);
-      setIsFormInvalidImage(true);
-      return;
     } else {
       setIsFormInvalidName(false);
+    }
+
+    if (formItems.description.trim() === "") {
+      setIsFormInvalidDesc(true);
+    } else {
       setIsFormInvalidDesc(false);
-      setIsFormInvalidPrice(false);
+    }
+
+    if (formItems.image.trim() === "") {
+      setIsFormInvalidImage(true);
+    } else {
       setIsFormInvalidImage(false);
     }
 
+    if (formItems.price === null) {
+      setIsFormInvalidPrice(true);
+      return;
+    } else {
+      setIsFormInvalidPrice(false);
+    }
+
+  }
+
+  const handleSubmit = () => {
+    const formData = { ...formItems };
+    validateForm();
     if (isEdit) {
       saveProduct(id,formData).then(() => {
         redirectToProductsList();
@@ -94,7 +110,7 @@ const ProductsForm = () => {
       .catch(({ response }) => {
       });
   };
-
+console.log(isFormInvalidImage);
   const classes = useStyles();
   return (
   <Container maxWidth="xs">
