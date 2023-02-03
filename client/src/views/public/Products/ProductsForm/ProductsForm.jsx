@@ -35,10 +35,8 @@ const ProductsForm = () => {
     image: "",
   });
 
-  const [isFormInvalidName, setIsFormInvalidName] = useState(false);
-  const [isFormInvalidPrice, setIsFormInvalidPrice] = useState(false);
-  const [isFormInvalidDesc, setIsFormInvalidDesc] = useState(false);
-  const [isFormInvalidImage, setIsFormInvalidImage] = useState(false);
+  const [itemErrors, setItemErrors] = useState({});
+
   useEffect(() => {
     async function fetchProductsData() {
       try {
@@ -67,31 +65,30 @@ const ProductsForm = () => {
   };
 
   const validateForm = () => {
-    if (formItems.name.trim() === ""){
-      setIsFormInvalidName(true);
-    } else {
-      setIsFormInvalidName(false);
+    if (formItems.name.trim().length === 0){
+      setItemErrors((prevState) => ({ ...prevState, name: 'Field is required' }));
     }
 
-    if (formItems.description.trim() === "") {
-      setIsFormInvalidDesc(true);
-    } else {
-      setIsFormInvalidDesc(false);
+    if (formItems.description.trim().length === 0) {
+      setItemErrors((prevState) => ({ ...prevState, description: 'Field is required' }));
     }
 
-    if (formItems.image.trim() === "") {
-      setIsFormInvalidImage(true);
-    } else {
-      setIsFormInvalidImage(false);
+    if (formItems.image.trim().length === 0) {
+      setItemErrors((prevState) => ({ ...prevState, image: 'Field is required' }));
     }
 
-    if (formItems.price === null) {
-      setIsFormInvalidPrice(true);
+    if (formItems.price === '') {
+      setItemErrors((prevState) => ({ ...prevState, price: 'Field is required' }));
+    }
+
+    if (
+      formItems.name.trim().length === 0
+      || formItems.description.trim().length === 0
+      || formItems.image.trim().length === 0
+      || formItems.price === ''
+    ) {
       return;
-    } else {
-      setIsFormInvalidPrice(false);
     }
-
   }
 
   const handleSubmit = () => {
@@ -101,7 +98,7 @@ const ProductsForm = () => {
       saveProduct(id,formData).then(() => {
         redirectToProductsList();
       }).catch(({ response }) => {
-
+        setItemErrors(response.data);
       });
       return;
     }
@@ -110,7 +107,18 @@ const ProductsForm = () => {
         redirectToProductsList();
       })
       .catch(({ response }) => {
+        setItemErrors(response.data);
       });
+  };
+
+  const hasSharedError = (field) => !!itemErrors[field];
+
+  const getSharedErrorMessage = (field) => {
+    if (!itemErrors[field]) {
+      return '';
+    }
+
+    return itemErrors[field];
   };
 
   const classes = useStyles();
@@ -133,8 +141,8 @@ const ProductsForm = () => {
                 id="name"
                 label="Name"
                 value={formItems.name}
-                error={isFormInvalidName}
-                helperText={isFormInvalidName && 'Field must not be empty!'}
+                error={hasSharedError('name')}
+                helperText={getSharedErrorMessage('name')}
                 onChange={(event) =>
                   handleFormItemsChange(event.target.value, "name")
                 }
@@ -148,8 +156,8 @@ const ProductsForm = () => {
                 value={formItems.price == null ? '' : formItems.price}
                 id="price"
                 label="Price"
-                error={isFormInvalidPrice}
-                helperText={isFormInvalidPrice && 'Field must not be empty!'}
+                error={hasSharedError('price')}
+                helperText={getSharedErrorMessage('price')}
                 onChange={(event) =>
                   handleFormItemsChange(event.target.value, "price")
                 }
@@ -164,8 +172,8 @@ const ProductsForm = () => {
                 id="description"
                 label="Description"
                 value={formItems.description}
-                error={isFormInvalidDesc}
-                helperText={isFormInvalidDesc && 'Field must not be empty!'}
+                error={hasSharedError('description')}
+                helperText={getSharedErrorMessage('description')}
                 onChange={(event) =>
                   handleFormItemsChange(event.target.value, "description")
                 }
@@ -179,8 +187,8 @@ const ProductsForm = () => {
                 id="image"
                 label="Image"
                 value={formItems.image}
-                error={isFormInvalidImage}
-                helperText={isFormInvalidImage && 'Field must not be empty!'}
+                error={hasSharedError('image')}
+                helperText={getSharedErrorMessage('image')}
                 onChange={(event) =>
                   handleFormItemsChange(event.target.value, "image")
                 }
