@@ -64,7 +64,9 @@ const ProductsForm = () => {
     navigate(publicRouteCodes.PRODUCTS, {state: {isCreated:true, isEdit:isEdit} });
   };
 
-  const validateForm = () => {
+  const handleSubmit = () => {
+    const formData = { ...formItems };
+
     if (formItems.name.trim().length === 0){
       setItemErrors((prevState) => ({ ...prevState, name: 'Field is required' }));
     }
@@ -77,7 +79,7 @@ const ProductsForm = () => {
       setItemErrors((prevState) => ({ ...prevState, image: 'Field is required' }));
     }
 
-    if (formItems.price === '') {
+    if (formItems.price === null) {
       setItemErrors((prevState) => ({ ...prevState, price: 'Field is required' }));
     }
 
@@ -85,15 +87,10 @@ const ProductsForm = () => {
       formItems.name.trim().length === 0
       || formItems.description.trim().length === 0
       || formItems.image.trim().length === 0
-      || formItems.price === ''
+      || formItems.price.length === null
     ) {
       return;
     }
-  }
-
-  const handleSubmit = () => {
-    const formData = { ...formItems };
-    validateForm();
     if (isEdit) {
       saveProduct(id,formData).then(() => {
         redirectToProductsList();
