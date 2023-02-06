@@ -79,7 +79,7 @@ const ProductsForm = () => {
       setItemErrors((prevState) => ({ ...prevState, image: 'Field is required' }));
     }
 
-    if (formItems.price === null) {
+    if (formItems.price === null || formItems.price === '') {
       setItemErrors((prevState) => ({ ...prevState, price: 'Field is required' }));
     }
 
@@ -88,6 +88,7 @@ const ProductsForm = () => {
       || formItems.description.trim().length === 0
       || formItems.image.trim().length === 0
       || formItems.price.length === null
+      || formItems.price === ''
     ) {
       return;
     }
