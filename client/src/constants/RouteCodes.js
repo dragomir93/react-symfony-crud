@@ -5,4 +5,5 @@ export const publicRouteCodes = {
   PRODUCTS: `${publicPath}products`,
   PRODUCTS_CREATE: `${publicPath}products/create`,
   PRODUCTS_EDIT: `${publicPath}products/edit/:id`,
+  PRODUCTS_SHOW: `${publicPath}products/show/:id`,
 };

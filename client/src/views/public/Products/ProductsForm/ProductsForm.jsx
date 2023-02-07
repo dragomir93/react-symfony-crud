@@ -123,8 +123,8 @@ const ProductsForm = () => {
   return (
   <Container maxWidth="xs">
       <div className={classes.paper}>
-        <Typography component="h1" variant="h5">
-          User
+        <Typography component="h1" variant="h5" color="primary" gutterBottom>
+          Product {!isEdit ? "create" : "edit"}
         </Typography>
         <form className={classes.form}>
           <Grid container spacing={2}>

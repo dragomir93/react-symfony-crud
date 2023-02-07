@@ -5,6 +5,8 @@ import PublicTemplates from '../templates/PublicTemplates';
 
 const Products = lazy(() => import('../views/public/Products/Products'));
 const ProductsForm = lazy(() => import('../views/public/Products/ProductsForm/ProductsForm'));
+const ProductsShow = lazy(() => import('../views/public/Products/ProductsShow'));
+
 const PublicRoutes = () => (
   <PublicTemplates>
   <Routes>
@@ -14,6 +16,7 @@ const PublicRoutes = () => (
     <Route path={publicRouteCodes.PRODUCTS} element={<Products/>} />
     <Route path={publicRouteCodes.PRODUCTS_CREATE} element={<ProductsForm/>} />
     <Route path={publicRouteCodes.PRODUCTS_EDIT} element={<ProductsForm/>} />
+    <Route path={publicRouteCodes.PRODUCTS_SHOW} element={<ProductsShow/>} />
   </Routes>
   </PublicTemplates>
 );

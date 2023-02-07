@@ -66,6 +66,11 @@ const Products = () => {
       setRemoveProductChecked(false);
     });
   }
+  const showProduct = (productId) => {
+    navigate(generatePath(generatePath(
+      publicRouteCodes.PRODUCTS_SHOW, { id: productId },
+    )));
+  }
 
   const updateProduct = (productId) => {
     navigate(generatePath(generatePath(
@@ -100,7 +105,7 @@ const Products = () => {
           <Box display="flex" marginBottom={3}>
             <Box flexGrow={1}>
               <Typography component="h2" variant="h6" color="primary" gutterBottom>
-                USERS
+                Products
               </Typography>
             </Box>
             <Box>
@@ -137,8 +142,9 @@ const Products = () => {
                   <TableCell align="left">{product.price} $</TableCell>
                   <TableCell align="center">
                     <ButtonGroup color="primary" aria-label="outlined primary button group">
+                      <Button onClick={() => showProduct(product.productId)} color="success">Show</Button>
                       <Button onClick={() => updateProduct(product.productId)}>Edit</Button>
-                      <Button onClick={() => handleDeleteProductPopup(product.productId)}>Delete</Button>
+                      <Button onClick={() => handleDeleteProductPopup(product.productId)} color="error">Delete</Button>
                     </ButtonGroup>
                   </TableCell>
                 </TableRow>
