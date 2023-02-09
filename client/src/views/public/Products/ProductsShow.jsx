@@ -2,12 +2,16 @@ import React, { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import {Box, Card, CardContent, Container,
   Paper, Typography } from '@mui/material';
-import { generatePath, Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import { useState } from 'react';
 import { publicRouteCodes } from '../../../constants/RouteCodes';
+import { getProductData } from './Api';
 
 const ProductsShow = () => {
+  const { id } = useParams();
+  const [product, setProduct] = useState([]);
+
 	const useStyles = makeStyles((theme) => ({
 		root: {
       flexGrow: 1,
@@ -28,6 +32,14 @@ const ProductsShow = () => {
   }));
 
   const classes = useStyles();
+
+  useEffect(() => {
+    getProductData(id).then((response) => {
+      setProduct(response);
+    }).catch((error) => {
+    
+    });
+  }, []);
 
   return (
     <Container className={classes.container} maxWidth="lg">    
@@ -52,19 +64,19 @@ const ProductsShow = () => {
               <Typography variant="h6" component="div">
                 Name:
                 </Typography>
-                <Typography>Test</Typography>
+                <Typography>{product.name}</Typography>
                 <Typography variant="h6" component="div">
                 Price:
                 </Typography>
-                <Typography>Test</Typography>
+                <Typography>{product.price}.00 $</Typography>
                 <Typography variant="h6" component="div">
                 Description:
                 </Typography>
-                <Typography>Test</Typography>
+                <Typography>{product.description}</Typography>
                 <Typography variant="h6" component="div">
                 Image:
                 </Typography>
-                <Typography>Test</Typography>
+                <Typography>{product.image}</Typography>
             </CardContent>
           </Card>
         </Box>
