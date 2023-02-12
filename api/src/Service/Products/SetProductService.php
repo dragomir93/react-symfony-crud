@@ -6,6 +6,7 @@ use App\Entity\Products;
 use App\Repository\ProductsRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class SetProductService
@@ -29,14 +30,19 @@ class SetProductService
 
     /**
      * @param array $data
+     * @param UploadedFile|null $file
      *
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function execute(array $data): void
+    public function execute(array $data, ?UploadedFile $file): void
     {
         $product = new Products();
         $product = $this->setProductData->execute($data, $product);
+        $product->setImageFile($file);
+        if (!$file) {
+            $product->setImageFile(null);
+        }
 
         $this->productsRepository->persist($product);
         $this->productsRepository->flush();

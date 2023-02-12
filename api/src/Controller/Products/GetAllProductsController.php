@@ -33,9 +33,7 @@ class GetAllProductsController extends AbstractController
             return new JsonResponse ($productsAll);
 
         } catch (\Exception $exception) {
-            $this->logger->error($exception->getMessage());
-
-            return new JsonResponse([], JsonResponse::HTTP_BAD_REQUEST);
+            return new JsonResponse([$exception->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
         }
     }
 }

@@ -134,7 +134,7 @@ const Products = () => {
                   <TableCell align="right">{product.productId}</TableCell>
                   <TableCell align="center">
                     <Box display="flex" justifyContent="center">
-                      <Avatar src={product.image}/>
+                      <Avatar src={`/product/image/${product.productId}`}/>
                     </Box>
                   </TableCell>
                   <TableCell align="left">{product.name}</TableCell>

@@ -5,6 +5,7 @@ import { publicRouteCodes } from "../../../../constants/RouteCodes";
 import ApiClient from "../../../../api/ApiClient";
 import { useNavigate, useParams } from "react-router-dom";
 import { getProductData, saveProduct } from "../Api";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -32,7 +33,7 @@ const ProductsForm = () => {
     name: "",
     price: null,
     description: "",
-    image: "",
+    image: null,
   });
 
   const [itemErrors, setItemErrors] = useState({});
@@ -63,6 +64,14 @@ const ProductsForm = () => {
   const redirectToProductsList = () => {
     navigate(publicRouteCodes.PRODUCTS, {state: {isCreated:true, isEdit:isEdit} });
   };
+  
+  const addImage = (event) => {
+    const file = event.target.files;
+    if (!file || !file[0]) {
+      return;
+    }
+    handleFormItemsChange(file[0], 'image');
+  };
 
   const handleSubmit = () => {
     const formData = { ...formItems };
@@ -75,9 +84,9 @@ const ProductsForm = () => {
       setItemErrors((prevState) => ({ ...prevState, description: 'Field is required' }));
     }
 
-    if (formItems.image.trim().length === 0) {
-      setItemErrors((prevState) => ({ ...prevState, image: 'Field is required' }));
-    }
+    // if (formItems.image.trim().length === 0) {
+    //   setItemErrors((prevState) => ({ ...prevState, image: 'Field is required' }));
+    // }
 
     if (formItems.price === null || formItems.price === '') {
       setItemErrors((prevState) => ({ ...prevState, price: 'Field is required' }));
@@ -86,7 +95,7 @@ const ProductsForm = () => {
     if (
       formItems.name.trim().length === 0
       || formItems.description.trim().length === 0
-      || formItems.image.trim().length === 0
+      // || formItems.image.trim().length === 0
       || formItems.price.length === null
       || formItems.price === ''
     ) {
@@ -101,7 +110,9 @@ const ProductsForm = () => {
       return;
     }
 
-    ApiClient.post("/api/product", JSON.stringify(formData)).then(() => {
+    ApiClient.post("/api/product",formData,{ headers: 
+      {'Accept': 'application/json',
+      'Content-Type': 'multipart/form-data',} }).then(() => {
         redirectToProductsList();
       })
       .catch(({ response }) => {
@@ -178,19 +189,15 @@ const ProductsForm = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="image"
-                label="Image"
-                value={formItems.image}
-                error={hasSharedError('image')}
-                helperText={getSharedErrorMessage('image')}
-                onChange={(event) =>
-                  handleFormItemsChange(event.target.value, "image")
-                }
-              />
+              <Typography component="p" variant="p" color="default" gutterBottom>
+                Add new image
+              </Typography>
+              <Button variant="contained" component="label">
+                Upload &nbsp;<CloudUploadIcon/>
+                <input hidden  accept="image/*" multiple type="file" onChange={(event) => {
+                addImage(event);
+              }}/>
+              </Button>
             </Grid>
           </Grid>
           <Button

@@ -20,7 +20,6 @@ class SetProductData
     {
         $product->setName($data['name'], $product);
         $product->setPrice($data['price'], $product);
-        $product->setImage($data['image'], $product);
         $product->setDescription($data['description'], $product);
         
         return $product;

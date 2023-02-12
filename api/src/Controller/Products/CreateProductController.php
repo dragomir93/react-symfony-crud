@@ -38,8 +38,12 @@ class CreateProductController extends AbstractController
     public function index(Request $request) : JsonResponse
     {
         try {
-            $data = json_decode($request->getContent(), true);
-            $this->setProductService->execute($data);
+            $data = [];
+            $file = $request->files->get('image');
+            $data['name'] = trim((string) $request->request->get('name'));
+            $data['description'] = trim((string) $request->request->get('description'));
+            $data['price'] = (int) $request->request->get('price');
+            $this->setProductService->execute($data, $file);
 
             return new JsonResponse([]);
         } catch (InvalidArgumentException $exception) {
@@ -50,9 +54,7 @@ class CreateProductController extends AbstractController
                 JsonResponse::HTTP_UNPROCESSABLE_ENTITY
             );
         } catch (\Exception $exception) {
-            $this->logger->error($exception->getMessage());
-
-            return new JsonResponse([], JsonResponse::HTTP_BAD_REQUEST);
+            return new JsonResponse([$exception->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
         }
     }
 }

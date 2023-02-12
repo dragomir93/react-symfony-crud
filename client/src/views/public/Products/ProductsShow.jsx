@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import {Box, Card, CardContent, Container,
+  Grid,
   Paper, Typography } from '@mui/material';
 import { Link, useParams } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import { useState } from 'react';
 import { publicRouteCodes } from '../../../constants/RouteCodes';
 import { getProductData } from './Api';
+import { height } from '@mui/system';
 
 const ProductsShow = () => {
   const { id } = useParams();
@@ -76,7 +78,14 @@ const ProductsShow = () => {
                 <Typography variant="h6" component="div">
                 Image:
                 </Typography>
-                <Typography>{product.image}</Typography>
+                <Grid>
+                <img
+                  src={`/product/image/${id}`}
+                  alt={product.image}
+                  loading="lazy"
+                  style={{ width: '5%', height: '5%' }}
+                />
+                </Grid>
             </CardContent>
           </Card>
         </Box>
