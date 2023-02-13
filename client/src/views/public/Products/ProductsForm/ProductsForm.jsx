@@ -1,4 +1,4 @@
-import { Button, Container, Grid, TextField, Typography } from "@mui/material";
+import { Alert, Button, Container, Grid, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { publicRouteCodes } from "../../../../constants/RouteCodes";
@@ -6,6 +6,7 @@ import ApiClient from "../../../../api/ApiClient";
 import { useNavigate, useParams } from "react-router-dom";
 import { getProductData, saveProduct } from "../Api";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { Stack } from "@mui/system";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -37,6 +38,8 @@ const ProductsForm = () => {
   });
 
   const [itemErrors, setItemErrors] = useState({});
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isUpdatedImage,setIsUpdatedImage] = useState(false);
 
   useEffect(() => {
     async function fetchProductsData() {
@@ -65,7 +68,37 @@ const ProductsForm = () => {
     navigate(publicRouteCodes.PRODUCTS, {state: {isCreated:true, isEdit:isEdit} });
   };
   
+  const changeImage = (event, isEditable = false) => {
+    setIsUpdatedImage(true);
+    setIsButtonDisabled(true);
+    const file = event.target.files;
+    if (!file || !file[0]) {
+      return;
+    }
+
+    const formDataCreate = new FormData();
+    formDataCreate.append('image', file[0]);
+    const url = '/product-image/update';
+    formDataCreate.append('id', id);
+
+    let message = 'Image added successfully';
+    if (isEditable) {
+      message = 'Image changed successfully';
+    }
+    ApiClient.post(url,
+      formDataCreate,
+      {'Accept': 'application/json',
+      'Content-Type': 'multipart/form-data',}).then(() => {
+    }).catch(({ response }) => {
+      setItemErrors(response.data);
+    }).finally(() => {
+      setIsButtonDisabled(false);
+    });
+  };
+
   const addImage = (event) => {
+    setIsButtonDisabled(true);
+    setIsUpdatedImage(true);
     const file = event.target.files;
     if (!file || !file[0]) {
       return;
@@ -130,8 +163,13 @@ const ProductsForm = () => {
     return itemErrors[field];
   };
 
+  setTimeout(() => {
+    setIsUpdatedImage(false);
+  }, 3000);
+
   const classes = useStyles();
   return (
+  <div>
   <Container maxWidth="xs">
       <div className={classes.paper}>
         <Typography component="h1" variant="h5" color="primary" gutterBottom>
@@ -189,15 +227,32 @@ const ProductsForm = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <Typography component="p" variant="p" color="default" gutterBottom>
-                Add new image
-              </Typography>
-              <Button variant="contained" component="label">
-                Upload &nbsp;<CloudUploadIcon/>
+              {!isEdit && (
+              <Button variant="contained" component="label" disabled={isButtonDisabled} color="warning">
+                Add image &nbsp;<CloudUploadIcon/>
                 <input hidden  accept="image/*" multiple type="file" onChange={(event) => {
                 addImage(event);
               }}/>
               </Button>
+              )}
+              {isEdit && (
+                <Button variant="contained" component="label" disabled={isButtonDisabled} color="warning">
+                  {formItems.image ? 'Change image' : 'Add image'} &nbsp;<CloudUploadIcon/>
+                  <input hidden  accept="image/*" multiple type="file" onChange={(event) => {
+                  changeImage(event, true);
+                }}/>
+                </Button>
+              )}
+              {isEdit && formItems.image && (
+                <Grid>
+                  <img
+                  src={`/product/image/${id}`}
+                  alt={formItems.image}
+                  loading="lazy"
+                  style={{ width: '35%', height: '35%', marginTop: '3%'}}
+                  />
+                </Grid>
+              )} 
             </Grid>
           </Grid>
           <Button
@@ -214,6 +269,12 @@ const ProductsForm = () => {
         </form>
       </div>
     </Container>
+    {isUpdatedImage &&
+      <Stack sx={{ width: '13%',marginTop:'80px',marginLeft:'10px',position:'fixed',top:0}}>
+        <Alert severity="success">Image has been added!</Alert>
+      </Stack>
+    }
+    </div>
   );
 };
 
