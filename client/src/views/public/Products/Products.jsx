@@ -109,7 +109,7 @@ const Products = () => {
               </Typography>
             </Box>
             <Box>
-              <Link to={publicRouteCodes.PRODUCTS_CREATE}>
+              <Link to={publicRouteCodes.PRODUCTS_CREATE} style={{ textDecoration: 'none' }}>
                 <Button variant="contained" color="primary">
                   CREATE
                 </Button>

@@ -53,7 +53,7 @@ const ProductsShow = () => {
             </Typography>
           </Box>
           <Box>
-            <Link to={publicRouteCodes.HOME}>
+            <Link to={publicRouteCodes.HOME} style={{ textDecoration: 'none' }}>
             <Button variant="contained" color="primary">
               Back to preview
             </Button>
