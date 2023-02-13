@@ -8,7 +8,6 @@ import { makeStyles } from '@mui/styles';
 import { useState } from 'react';
 import { publicRouteCodes } from '../../../constants/RouteCodes';
 import { getProductData } from './Api';
-import { height } from '@mui/system';
 
 const ProductsShow = () => {
   const { id } = useParams();
