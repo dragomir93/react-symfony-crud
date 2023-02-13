@@ -40,6 +40,7 @@ const ProductsForm = () => {
   const [itemErrors, setItemErrors] = useState({});
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isUpdatedImage,setIsUpdatedImage] = useState(false);
+  const [selectedImage, setSelectedImage] = useState();
 
   useEffect(() => {
     async function fetchProductsData() {
@@ -71,9 +72,15 @@ const ProductsForm = () => {
   const changeImage = (event, isEditable = false) => {
     setIsUpdatedImage(true);
     setIsButtonDisabled(true);
+
     const file = event.target.files;
     if (!file || !file[0]) {
       return;
+    }
+
+    if (file && file.length > 0) {
+      setSelectedImage(URL.createObjectURL(file[0]));
+      localStorage.setItem(`image-${id}`, URL.createObjectURL(file[0]));
     }
 
     const formDataCreate = new FormData();
@@ -81,10 +88,6 @@ const ProductsForm = () => {
     const url = '/product-image/update';
     formDataCreate.append('id', id);
 
-    let message = 'Image added successfully';
-    if (isEditable) {
-      message = 'Image changed successfully';
-    }
     ApiClient.post(url,
       formDataCreate,
       {'Accept': 'application/json',
@@ -105,6 +108,14 @@ const ProductsForm = () => {
     }
     handleFormItemsChange(file[0], 'image');
   };
+
+  useEffect(() => {
+    setSelectedImage(localStorage.getItem(`image-${id}`));
+  }, []);
+
+  setTimeout(() => {
+    localStorage.removeItem(`image-${id}`);
+  }, 30000);
 
   const handleSubmit = () => {
     const formData = { ...formItems };
@@ -246,7 +257,7 @@ const ProductsForm = () => {
               {isEdit && formItems.image && (
                 <Grid>
                   <img
-                  src={`/product/image/${id}`}
+                  src={selectedImage !== null ? selectedImage : `/product/image/${id}`}
                   alt={formItems.image}
                   loading="lazy"
                   style={{ width: '35%', height: '35%', marginTop: '3%'}}
@@ -271,7 +282,7 @@ const ProductsForm = () => {
     </Container>
     {isUpdatedImage &&
       <Stack sx={{ width: '13%',marginTop:'80px',marginLeft:'10px',position:'fixed',top:0}}>
-        <Alert severity="success">Image has been added!</Alert>
+        <Alert severity="success"> {isEdit ? 'Image changed successfully': 'Image added successfully'}</Alert>
       </Stack>
     }
     </div>
