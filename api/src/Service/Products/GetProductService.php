@@ -2,7 +2,6 @@
 
 namespace App\Service\Products;
 
-use App\Entity\Products;
 use App\Repository\ProductsRepository;
 
 class GetProductService {
