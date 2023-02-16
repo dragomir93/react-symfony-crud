@@ -255,7 +255,7 @@ const ProductsForm = () => {
                 }}/>
                 </Button>
               )}
-              {isEdit && formItems.image && (
+              {isEdit && (
                 <Grid>
                   <img
                   src={selectedImage !== null ? selectedImage : `/product/image/${id}`}
