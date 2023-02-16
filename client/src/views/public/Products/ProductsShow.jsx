@@ -12,6 +12,7 @@ import { getProductData } from './Api';
 const ProductsShow = () => {
   const { id } = useParams();
   const [product, setProduct] = useState([]);
+  const [selectedImage, setSelectedImage] = useState();
 
 	const useStyles = makeStyles((theme) => ({
 		root: {
@@ -41,6 +42,14 @@ const ProductsShow = () => {
     
     });
   }, []);
+
+  useEffect(() => {
+    setSelectedImage(localStorage.getItem(`image-${id}`));
+  }, []);
+
+  setTimeout(() => {
+    localStorage.removeItem(`image-${id}`);
+  }, 30000);
 
   return (
     <Container className={classes.container} maxWidth="lg">    
@@ -79,7 +88,7 @@ const ProductsShow = () => {
                 </Typography>
                 <Grid>
                 <img
-                  src={`/product/image/${id}`}
+                  src={selectedImage !== null ? selectedImage : `/product/image/${id}`}
                   alt={product.image}
                   loading="lazy"
                   style={{ width: '5%', height: '5%' }}
