@@ -20,10 +20,10 @@ class SaveProductController extends AbstractController
     /**
      * @param EditProductDataService $editProductDataService
      */
-    public function __construct(EditProductDataService $editProductDataService){
-    
+    public function __construct(
+        EditProductDataService $editProductDataService
+    ){
         $this->editProductDataService = $editProductDataService;
-
     }
 
     /**

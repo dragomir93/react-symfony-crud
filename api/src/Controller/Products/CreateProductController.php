@@ -23,7 +23,7 @@ class CreateProductController extends AbstractController
      * @param SetProductService $setProductService
      */
     public function __construct(
-        SetProductService $setProductService,
+        SetProductService $setProductService
     ) {
         $this->setProductService = $setProductService;
     }

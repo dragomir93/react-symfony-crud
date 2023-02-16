@@ -11,11 +11,12 @@ class GetProductsService {
      * @param ProductsRepository $productRepository
      */
     public function __construct(
-     ProductsRepository $productRepository,
+     ProductsRepository $productRepository
      ){
         $this->productRepository = $productRepository;
 
     }
+    
     /**
      *  @return array
      */

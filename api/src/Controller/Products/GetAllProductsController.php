@@ -14,10 +14,10 @@ class GetAllProductsController extends AbstractController
     /**
      * @param GetProductsService $products
      */
-    public function __construct(GetProductsService $products){
-    
+    public function __construct(
+        GetProductsService $products
+    ){
         $this->products = $products;
-
     }
 
     /**

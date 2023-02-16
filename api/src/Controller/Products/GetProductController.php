@@ -15,10 +15,10 @@ class GetProductController extends AbstractController
     /**
      * @param GetProductService $product
      */
-    public function __construct(GetProductService $product){
-    
+    public function __construct(
+        GetProductService $product
+    ){
         $this->product = $product;
-
     }
 
     /**
@@ -35,9 +35,7 @@ class GetProductController extends AbstractController
             return new JsonResponse ($productFinal);
             
         } catch (\Exception $exception) {
-            $this->logger->error($exception->getMessage());
-
-            return new JsonResponse([], JsonResponse::HTTP_BAD_REQUEST);
+            return new JsonResponse([$exception->getMessage()], JsonResponse::HTTP_BAD_REQUEST);
         }
     }
 }

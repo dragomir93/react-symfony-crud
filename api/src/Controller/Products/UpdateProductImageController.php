@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace App\Controller\Products;
 
@@ -20,7 +19,7 @@ class UpdateProductImageController extends AbstractController
      * @param ProductsRepository $productRepository
      */
     public function __construct(
-        ProductsRepository $productRepository,
+        ProductsRepository $productRepository
     ) {
         $this->productRepository = $productRepository;
     }

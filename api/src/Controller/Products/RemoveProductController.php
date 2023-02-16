@@ -23,7 +23,7 @@ class RemoveProductController extends AbstractController
      * @param ProductsRepository $productsRepository
      */
     public function __construct(
-        ProductsRepository $productsRepository,
+        ProductsRepository $productsRepository
     ) {
         $this->productsRepository = $productsRepository;
     }

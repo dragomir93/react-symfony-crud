@@ -16,10 +16,10 @@ class GetImageController extends AbstractController
     private $kernel;
 
     /**
-     * @param KernelInterface      $kernel
+     * @param KernelInterface $kernel
      */
     public function __construct(
-        KernelInterface $kernel,
+        KernelInterface $kernel
     ) {
         $this->kernel = $kernel;
     }
