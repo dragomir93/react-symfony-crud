@@ -1,6 +1,4 @@
 vich_uploader:
-    metadata:
-        type: attribute
     db_driver: orm
     mappings:
        upload_product_file:
