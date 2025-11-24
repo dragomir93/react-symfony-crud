@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<ruleset name="TMS">
+    <exclude-pattern>*/Migrations/*</exclude-pattern>
+    <exclude-pattern>src/Kernel.php</exclude-pattern>
+
+    <config name="installed_paths" value="../../../vendor/escapestudios/symfony2-coding-standard"/><!-- relative path from PHPCS source location -->
+    <rule ref="PSR1"/>
+    <rule ref="PSR2"/>
+    <rule ref="Symfony">
+        <exclude name="Symfony.Commenting.License"/>
+        <exclude name="Symfony.Functions.Arguments"/>
+    </rule>
+
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="120"/>
+            <property name="absoluteLineLimit" value="0"/>
+        </properties>
+    </rule>
+
+</ruleset>
