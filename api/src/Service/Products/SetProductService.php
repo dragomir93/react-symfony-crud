@@ -17,11 +17,11 @@ class SetProductService
     private $productsRepository;
 
     /**
-     * @param SetProductData     setProductData
+     * @param SetProductData     $setProductData
      * @param ProductsRepository $productsRepository
      */
     public function __construct(
-        SetProductData    $setProductData,
+        SetProductData     $setProductData,
         ProductsRepository $productsRepository
     ) {
         $this->setProductData = $setProductData;
@@ -29,7 +29,7 @@ class SetProductService
     }
 
     /**
-     * @param array $data
+     * @param array             $data
      * @param UploadedFile|null $file
      *
      * @throws ORMException

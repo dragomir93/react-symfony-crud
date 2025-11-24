@@ -11,10 +11,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
+/**
+ * Class SaveProductController
+ */
 class SaveProductController extends AbstractController
 {
     use LoggerAwareTrait;
-    
+
     private $editProductDataService;
 
     /**
@@ -22,26 +25,27 @@ class SaveProductController extends AbstractController
      */
     public function __construct(
         EditProductDataService $editProductDataService
-    ){
+    ) {
         $this->editProductDataService = $editProductDataService;
     }
 
     /**
      * @Route("/api/product/{id}", methods={"POST"})
-     * 
-     * @param Products  $product
-     * @param Request   $request
+     *
+     * @param Request  $request
+     * @param Products $product
      *
      * @return JsonResponse
      */
     public function index(Request $request, Products $product): JsonResponse
     {
-        try{
+        try {
             $data = (new JsonEncoder())->decode($request->getContent(), JsonEncoder::FORMAT);
             $this->editProductDataService->execute($data, $product);
 
             return new JsonResponse([]);
         } catch (\Exception $exception) {
+            /** @phpstan-ignore-next-line */
             $this->logger->error($exception->getMessage());
 
             return new JsonResponse([], JsonResponse::HTTP_BAD_REQUEST);

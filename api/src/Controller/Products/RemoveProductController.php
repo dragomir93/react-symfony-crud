@@ -44,6 +44,7 @@ class RemoveProductController extends AbstractController
 
             return new JsonResponse([]);
         } catch (Exception $exception) {
+            /** @phpstan-ignore-next-line */
             $this->logger->error((string) $exception);
 
             return new JsonResponse([], JsonResponse::HTTP_BAD_REQUEST);

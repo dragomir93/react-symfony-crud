@@ -18,7 +18,7 @@ class CreateProductController extends AbstractController
     use LoggerAwareTrait;
 
     private $setProductService;
-  
+
     /**
      * @param SetProductService $setProductService
      */
@@ -47,6 +47,7 @@ class CreateProductController extends AbstractController
 
             return new JsonResponse([]);
         } catch (InvalidArgumentException $exception) {
+            /** @phpstan-ignore-next-line */
             $this->logger->info($exception->getMessage());
 
             return new JsonResponse(

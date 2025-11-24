@@ -45,7 +45,7 @@ class UpdateProductImageController extends AbstractController
                 );
             }
             $product->setImageFile($file);
-            
+
             if (!$file) {
                 $product->setImageFile(null);
             }

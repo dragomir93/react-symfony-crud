@@ -1,12 +1,15 @@
 includes:
-	- vendor/phpstan/phpstan-symfony/extension.neon
-	- vendor/phpstan/phpstan-doctrine/extension.neon
-	- vendor/roave/no-floaters/rules.neon
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor/roave/no-floaters/rules.neon
 
 parameters:
-    excludes_analyse:
+    excludePaths:
         - */Migrations/*
         - src/Entity/*
-    checkMissingIterableValueType: false
-    checkGenericClassInNonGenericObjectType: false
+    ignoreErrors:
+        -
+            identifier: missingType.iterableValue
+        -
+            identifier: missingType.generics
     inferPrivatePropertyTypeFromConstructor: true

@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class GetImageController
+ */
 class GetImageController extends AbstractController
 {
     private $kernel;
@@ -41,7 +44,7 @@ class GetImageController extends AbstractController
 
                 return new BinaryFileResponse($imageName);
             }
-            
+
             $filepath = $this->kernel->getProjectDir().'/public/images/products/'.$imageName;
 
             $response = new Response();
@@ -49,6 +52,7 @@ class GetImageController extends AbstractController
 
             $response->headers->set('Content-Disposition', $disposition);
             $response->headers->set('Content-Type', 'image/png');
+            /** @phpstan-ignore-next-line */
             $response->setContent(file_get_contents($filepath));
 
             return $response;

@@ -18,10 +18,10 @@ class SetProductData
      */
     public function execute(array $data, Products $product): Products
     {
-        $product->setName($data['name'], $product);
-        $product->setPrice($data['price'], $product);
-        $product->setDescription($data['description'], $product);
-        
+        $product->setName($data['name']);
+        $product->setPrice($data['price']);
+        $product->setDescription($data['description']);
+
         return $product;
     }
 }

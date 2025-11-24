@@ -15,8 +15,13 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Products[]    findAll()
  * @method Products[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ProductsRepository extends ExtendedEntityRepository
+class ProductsRepository extends ExtendedEntityRepository /** @phpstan-ignore-line */
 {
+    /**
+     * ProductsRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Products::class);

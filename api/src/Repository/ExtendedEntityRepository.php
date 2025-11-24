@@ -48,7 +48,7 @@ class ExtendedEntityRepository extends ServiceEntityRepository
      *
      * @return void
      */
-    public function clear()
+    public function clear() /** @phpstan-ignore-line */
     {
         $this->_em->clear();
     }
@@ -75,7 +75,7 @@ class ExtendedEntityRepository extends ServiceEntityRepository
      */
     public function getReference(string $entityName, $id)
     {
-        return $this->_em->getReference($entityName, $id);
+        return $this->_em->getReference($entityName, $id); /** @phpstan-ignore-line */
     }
 
     /**

@@ -18,14 +18,23 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserRepository extends ExtendedEntityRepository implements PasswordUpgraderInterface
+class UserRepository extends ExtendedEntityRepository implements PasswordUpgraderInterface /** @phpstan-ignore-line */
 {
+    /**
+     * UserRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
     }
 
     /**
+     * @param PasswordAuthenticatedUserInterface $user
+     * @param string                             $newHashedPassword
+     *
+     * @return void
      * Used to upgrade (rehash) the user's password automatically over time.
      */
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
@@ -36,7 +45,7 @@ class UserRepository extends ExtendedEntityRepository implements PasswordUpgrade
 
         $user->setPassword($newHashedPassword);
 
-        $this->add($user, true);
+        $this->add($user, true); /** @phpstan-ignore-line */
     }
 
 //    /**

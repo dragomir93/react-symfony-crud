@@ -10,7 +10,8 @@ use Doctrine\ORM\ORMException;
 /**
  * Class EditProductDataService
  */
-class EditProductDataService {
+class EditProductDataService
+{
 
     private $setProductData;
     private $productRepository;
@@ -26,7 +27,7 @@ class EditProductDataService {
         $this->setProductData = $setProductData;
         $this->productRepository = $productRepository;
     }
-    
+
      /**
      * @param array         $data
      * @param Products|null $product
